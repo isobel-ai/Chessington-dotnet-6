@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using Chessington.GameEngine;
 using Chessington.GameEngine.Pieces;
 using Chessington.UI.Caliburn.Micro;
@@ -18,7 +20,7 @@ namespace Chessington.UI.ViewModels
             Board.CurrentPlayerChanged += BoardOnCurrentPlayerChanged;
             ChessingtonServices.EventAggregator.Subscribe(this);
         }
-        
+
         public Board Board { get; private set; }
 
         public void PiecesMoved()
@@ -31,7 +33,7 @@ namespace Chessington.UI.ViewModels
             _currentPiece = Board.GetPiece(message.Square);
             if (_currentPiece == null) return;
 
-            var moves = new ReadOnlyCollection<Square>(_currentPiece.GetAvailableMoves(Board).ToList());
+            var moves = new ReadOnlyCollection<Square>(_currentPiece.GetNonCheckMoves(Board).ToList());
             ChessingtonServices.EventAggregator.Publish(new ValidMovesUpdated(moves));
         }
 
@@ -52,12 +54,22 @@ namespace Chessington.UI.ViewModels
             if (_currentPiece == null)
                 return;
 
-            var moves = _currentPiece.GetAvailableMoves(Board);
+            var moves = _currentPiece.GetNonCheckMoves(Board);
 
             if (moves.Contains(message.Square))
             {
                 _currentPiece.MoveTo(Board, message.Square);
-                
+
+                if (Board.IsCheckmate())
+                {
+                    MessageBox.Show(String.Format("Checkmate!{0}{0}{1} Wins.", Environment.NewLine,
+                        Board.CurrentPlayer == Player.White ? Player.Black : Player.White));
+                }
+                else if (Board.IsStalemate())
+                {
+                    MessageBox.Show("Stalemate.");
+                }
+
                 ChessingtonServices.EventAggregator.Publish(new PiecesMoved(Board));
                 ChessingtonServices.EventAggregator.Publish(new SelectionCleared());
             }
