@@ -18,9 +18,17 @@ namespace Chessington.GameEngine.Pieces
             {
                 case Player.White:
                     squares.Add(Square.At(currentSquare.Row - 1, currentSquare.Col));
+                    if (!board.MovedPawns.Contains(this))
+                    {
+                        squares.Add(Square.At(currentSquare.Row - 2, currentSquare.Col));
+                    }
                     break;
                 default: // Player.Black
                     squares.Add(Square.At(currentSquare.Row + 1, currentSquare.Col));
+                    if (!board.MovedPawns.Contains(this))
+                    {
+                        squares.Add(Square.At(currentSquare.Row + 2, currentSquare.Col));
+                    }
                     break;
             }
             

@@ -9,6 +9,8 @@ namespace Chessington.GameEngine
         private readonly Piece[,] _board;
         public Player CurrentPlayer { get; private set; }
         public IList<Piece> CapturedPieces { get; private set; } 
+        
+        public IList<Piece> MovedPawns { get; }
 
         public Board()
             : this(Player.White) { }
@@ -18,6 +20,7 @@ namespace Chessington.GameEngine
             _board = boardState ?? new Piece[GameSettings.BoardSize, GameSettings.BoardSize]; 
             CurrentPlayer = currentPlayer;
             CapturedPieces = new List<Piece>();
+            MovedPawns = new List<Piece>();
         }
 
         public void AddPiece(Square square, Piece pawn)
@@ -50,6 +53,11 @@ namespace Chessington.GameEngine
                 throw new ArgumentException("The supplied piece does not belong to the current player.");
             }
 
+            if (movingPiece is Pawn)
+            {
+                MovedPawns.Add(movingPiece);
+            }
+            
             //If the space we're moving to is occupied, we need to mark it as captured.
             if (_board[to.Row, to.Col] != null)
             {
