@@ -14,11 +14,11 @@ namespace Chessington.GameEngine.Pieces
             var moveSquares = new List<Square>();
 
             for (var i = 0; i < GameSettings.BoardSize; i++)
+            {
                 moveSquares.Add(Square.At(currentSquare.Row, i));
-
-            for (var i = 0; i < GameSettings.BoardSize; i++)
                 moveSquares.Add(Square.At(i, currentSquare.Col));
-
+            }
+            
             // Get rid of our starting location.
             moveSquares.RemoveAll(s => s == currentSquare);
 

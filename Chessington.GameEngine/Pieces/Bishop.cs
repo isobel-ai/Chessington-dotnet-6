@@ -13,38 +13,21 @@ namespace Chessington.GameEngine.Pieces
             var currentSquare = board.FindPiece(this);
             var moveSquares = new List<Square>();
 
-            // Moving SW
-            var addRow = currentSquare.Row - 1;
-            var addCol = currentSquare.Col - 1;
-            while (addRow >= 0 && addCol >= 0)
+            for (var vDir = -1; vDir <= 1; vDir += 2)
             {
-                moveSquares.Add(Square.At(addRow--, addCol--));
+                for (var hDir = -1; hDir <= 1; hDir += 2)
+                {
+                    var addRow = currentSquare.Row + vDir;
+                    var addCol = currentSquare.Col + hDir;
+                    while (addRow >= 0 && addCol >= 0 && addRow < GameSettings.BoardSize && addCol < GameSettings.BoardSize)
+                    {
+                        moveSquares.Add(Square.At(addRow, addCol));
+                        addRow += vDir;
+                        addCol += hDir;
+                    }
+                }
             }
-            
-            // Moving SE
-            addRow = currentSquare.Row - 1;
-            addCol = currentSquare.Col + 1;
-            while (addRow >= 0 && addCol < GameSettings.BoardSize)
-            {
-                moveSquares.Add(Square.At(addRow--, addCol++));
-            }
-            
-            // Moving NW
-            addRow = currentSquare.Row + 1;
-            addCol = currentSquare.Col - 1;
-            while (addRow < GameSettings.BoardSize && addCol >= 0)
-            {
-                moveSquares.Add(Square.At(addRow++, addCol--));
-            }
-            
-            // Moving NE
-            addRow = currentSquare.Row + 1;
-            addCol = currentSquare.Col + 1;
-            while (addRow < GameSettings.BoardSize && addCol < GameSettings.BoardSize)
-            {
-                moveSquares.Add(Square.At(addRow++, addCol++));
-            }
-            
+
             return moveSquares;
         }
     }
