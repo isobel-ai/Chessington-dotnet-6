@@ -15,10 +15,10 @@ namespace Chessington.GameEngine.Pieces
             var moveSquares = new List<Square>();
             var direction = Player == Player.White ? -1 : 1;
             
-            moveSquares.Add(Square.At(currentSquare.Row + direction * 1, currentSquare.Col));
+            GetLongitudinalMoves(board, currentSquare, moveSquares, 1, direction);
             if (!board.MovedPawns.Contains(this))
             {
-                moveSquares.Add(Square.At(currentSquare.Row + direction * 2, currentSquare.Col));
+                GetLongitudinalMoves(board, currentSquare, moveSquares, 2, direction);
             }
             return moveSquares;
         }
