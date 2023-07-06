@@ -20,7 +20,7 @@ namespace Chessington.GameEngine.Pieces
             {
                 var newRow = currentSquare.Row + dx[i];
                 var newCol = currentSquare.Col + 2 * dy[i];
-                if (newRow >= 0 && newRow < GameSettings.BoardSize && newCol >= 0 && newCol < GameSettings.BoardSize)
+                if (IsOnBoard(Square.At(newRow, newCol)))
                 {
                     moveSquares.Add(Square.At(newRow,newCol));
                     (newRow, newCol) = (newCol, newRow);

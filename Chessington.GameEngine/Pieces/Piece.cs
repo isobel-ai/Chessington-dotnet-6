@@ -18,14 +18,25 @@ namespace Chessington.GameEngine.Pieces
             var currentSquare = board.FindPiece(this);
             board.MovePiece(currentSquare, newSquare);
         }
+
+        protected bool IsOnBoard(Square square)
+        {
+            return (0 <= square.Row && square.Row < GameSettings.BoardSize && 0 <= square.Col &&
+                    square.Col < GameSettings.BoardSize);
+        }
+
+        private bool IsEmpty(Board board, Square square)
+        {
+            return board.GetPiece(Square.At(square.Row, square.Col)) == null;
+        }
         
         protected void GetLongitudinalMoves(Board board, Square currentSquare, List<Square> moveSquares, int range, int direction)
         {
             for (var i = 1; i <= range; i++)
             {
-                if (0 <= currentSquare.Row + i * direction && currentSquare.Row + i * direction < GameSettings.BoardSize)
+                if (IsOnBoard(Square.At(currentSquare.Row + i * direction, currentSquare.Col)))
                 {
-                    if (board.GetPiece(Square.At(currentSquare.Row + i * direction, currentSquare.Col)) == null)
+                    if (IsEmpty(board, Square.At(currentSquare.Row + i * direction, currentSquare.Col)))
                     {
                         moveSquares.Add(Square.At(currentSquare.Row + i * direction, currentSquare.Col));
                     }
@@ -39,17 +50,24 @@ namespace Chessington.GameEngine.Pieces
         
         protected void GetLateralMoves(Board board, Square currentSquare, List<Square> moveSquares, int range)
         {
-            for (var i = 1; i <= range; i++)
+            for (var direction = -1; direction <= 1; direction += 2)
             {
-                if (0 <= currentSquare.Col + i && currentSquare.Col + i < GameSettings.BoardSize)
+                for (var i = 1; i <= range; i++)
                 {
-                    moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col + i));
-                }
-                if (0 <= currentSquare.Col - i && currentSquare.Col - i < GameSettings.BoardSize)
-                {
-                    moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col - i));
-                }
-            }  
+                    if (IsOnBoard(Square.At(currentSquare.Row, currentSquare.Col + i * direction)))
+                    {
+                        if (IsEmpty(board, Square.At(currentSquare.Row, currentSquare.Col + i * direction)))
+                        {
+                            moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col + i * direction));
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }               
+            }
+
         }
         protected void GetDiagonalMoves(Board board, Square currentSquare, List<Square> moveSquares, int range)
         {
@@ -61,7 +79,7 @@ namespace Chessington.GameEngine.Pieces
                     {
                         var addRow = currentSquare.Row + vDir * i;
                         var addCol = currentSquare.Col + hDir * i;
-                        if (addRow >= 0 && addCol >= 0 && addRow < GameSettings.BoardSize && addCol < GameSettings.BoardSize)
+                        if (IsOnBoard(Square.At(addRow, addCol)))
                         {
                             moveSquares.Add(Square.At(addRow, addCol));
                         }   
