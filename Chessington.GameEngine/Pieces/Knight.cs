@@ -22,9 +22,15 @@ namespace Chessington.GameEngine.Pieces
                 var newCol = currentSquare.Col + 2 * dy[i];
                 if (IsOnBoard(Square.At(newRow, newCol)))
                 {
-                    moveSquares.Add(Square.At(newRow,newCol));
+                    if (IsEmpty(board, Square.At(newRow, newCol)) || SquaresHaveOpposingPlayers(board, currentSquare, Square.At(newRow, newCol)))
+                    {
+                        moveSquares.Add(Square.At(newRow,newCol));
+                    }
                     (newRow, newCol) = (newCol, newRow);
-                    moveSquares.Add(Square.At(newRow,newCol));
+                    if (IsEmpty(board, Square.At(newRow, newCol)) || SquaresHaveOpposingPlayers(board, currentSquare, Square.At(newRow, newCol)))
+                    {
+                        moveSquares.Add(Square.At(newRow,newCol));
+                    }
                 }
             }
 

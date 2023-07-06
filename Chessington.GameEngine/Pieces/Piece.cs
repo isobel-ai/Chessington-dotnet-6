@@ -25,9 +25,14 @@ namespace Chessington.GameEngine.Pieces
                     square.Col < GameSettings.BoardSize);
         }
 
-        private bool IsEmpty(Board board, Square square)
+        protected bool IsEmpty(Board board, Square square)
         {
             return board.GetPiece(Square.At(square.Row, square.Col)) == null;
+        }
+
+        protected bool SquaresHaveOpposingPlayers(Board board, Square square1, Square square2)
+        {
+            return board.GetPiece(square1).Player != board.GetPiece(square2).Player;
         }
         
         protected void GetLongitudinalMoves(Board board, Square currentSquare, List<Square> moveSquares, int range, int direction)
@@ -62,8 +67,7 @@ namespace Chessington.GameEngine.Pieces
                         }
                         else
                         {
-                            if (board.GetPiece(currentSquare).Player != board
-                                    .GetPiece(Square.At(currentSquare.Row, currentSquare.Col + i * direction)).Player)
+                            if (SquaresHaveOpposingPlayers(board, currentSquare, Square.At(currentSquare.Row, currentSquare.Col + i * direction)))
                             {
                                 moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col + i * direction));
                             }
@@ -92,8 +96,7 @@ namespace Chessington.GameEngine.Pieces
                             }
                             else
                             {
-                                if (board.GetPiece(currentSquare).Player != board
-                                        .GetPiece(Square.At(addRow, addCol)).Player)
+                                if (SquaresHaveOpposingPlayers(board, currentSquare, Square.At(addRow, addCol)))
                                 {
                                     moveSquares.Add(Square.At(addRow, addCol));
                                 }

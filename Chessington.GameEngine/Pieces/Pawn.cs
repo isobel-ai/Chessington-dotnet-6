@@ -20,6 +20,19 @@ namespace Chessington.GameEngine.Pieces
             {
                 GetLongitudinalMoves(board, currentSquare, moveSquares, 2, direction);
             }
+
+            var diagonal1 = Square.At(currentSquare.Row + 1 * direction, currentSquare.Col + 1 * direction);
+            var diagonal2 = Square.At(currentSquare.Row + 1 * direction, currentSquare.Col - 1 * direction);
+
+            if (IsOnBoard(diagonal1) && !IsEmpty(board, diagonal1) && SquaresHaveOpposingPlayers(board, currentSquare, diagonal1))
+            {
+                moveSquares.Add(diagonal1);
+            }
+            if (IsOnBoard(diagonal2) && !IsEmpty(board, diagonal2) && SquaresHaveOpposingPlayers(board, currentSquare, diagonal2))
+            {
+                moveSquares.Add(diagonal2);
+            }
+            
             return moveSquares;
         }
     }
