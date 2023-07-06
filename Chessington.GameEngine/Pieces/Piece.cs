@@ -25,9 +25,31 @@ namespace Chessington.GameEngine.Pieces
             {
                 if (0 <= currentSquare.Row + i * direction && currentSquare.Row + i * direction < GameSettings.BoardSize)
                 {
-                    moveSquares.Add(Square.At(currentSquare.Row + i * direction, currentSquare.Col));
+                    if (board.GetPiece(Square.At(currentSquare.Row + i * direction, currentSquare.Col)) == null)
+                    {
+                        moveSquares.Add(Square.At(currentSquare.Row + i * direction, currentSquare.Col));
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
+        }
+        
+        protected void GetLateralMoves(Board board, Square currentSquare, List<Square> moveSquares, int range)
+        {
+            for (var i = 1; i <= range; i++)
+            {
+                if (0 <= currentSquare.Col + i && currentSquare.Col + i < GameSettings.BoardSize)
+                {
+                    moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col + i));
+                }
+                if (0 <= currentSquare.Col - i && currentSquare.Col - i < GameSettings.BoardSize)
+                {
+                    moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col - i));
+                }
+            }  
         }
         protected void GetDiagonalMoves(Board board, Square currentSquare, List<Square> moveSquares, int range)
         {
@@ -46,21 +68,6 @@ namespace Chessington.GameEngine.Pieces
                     }
                 }
             }
-        }
-
-        protected void GetLateralMoves(Board board, Square currentSquare, List<Square> moveSquares, int range)
-        {
-            for (var i = 1; i <= range; i++)
-            {
-                if (0 <= currentSquare.Col + i && currentSquare.Col + i < GameSettings.BoardSize)
-                {
-                    moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col + i));
-                }
-                if (0 <= currentSquare.Col - i && currentSquare.Col - i < GameSettings.BoardSize)
-                {
-                    moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col - i));
-                }
-            }  
         }
     }
 }
