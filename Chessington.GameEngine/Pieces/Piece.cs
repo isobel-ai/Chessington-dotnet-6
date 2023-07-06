@@ -62,6 +62,11 @@ namespace Chessington.GameEngine.Pieces
                         }
                         else
                         {
+                            if (board.GetPiece(currentSquare).Player != board
+                                    .GetPiece(Square.At(currentSquare.Row, currentSquare.Col + i * direction)).Player)
+                            {
+                                moveSquares.Add(Square.At(currentSquare.Row, currentSquare.Col + i * direction));
+                            }
                             break;
                         }
                     }
@@ -87,6 +92,11 @@ namespace Chessington.GameEngine.Pieces
                             }
                             else
                             {
+                                if (board.GetPiece(currentSquare).Player != board
+                                        .GetPiece(Square.At(addRow, addCol)).Player)
+                                {
+                                    moveSquares.Add(Square.At(addRow, addCol));
+                                }
                                 break;
                             }
                         }   
