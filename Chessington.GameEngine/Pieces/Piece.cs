@@ -81,7 +81,14 @@ namespace Chessington.GameEngine.Pieces
                         var addCol = currentSquare.Col + hDir * i;
                         if (IsOnBoard(Square.At(addRow, addCol)))
                         {
-                            moveSquares.Add(Square.At(addRow, addCol));
+                            if (IsEmpty(board, Square.At(addRow, addCol)))
+                            {
+                                moveSquares.Add(Square.At(addRow, addCol));
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }   
                     }
                 }
